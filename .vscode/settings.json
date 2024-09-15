@@ -38,7 +38,7 @@
         "--float-to-top"
     ],
     "python.testing.pytestArgs": [
-        "tests"
+        "."
     ],
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
