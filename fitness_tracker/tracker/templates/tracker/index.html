@@ -1,0 +1,24 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}
+  Home
+{% endblock %}
+
+{% block content %}
+  <h1>Welcome, {{ user.username }}</h1>
+  <h2>Your Measurements:</h2>
+  <ul>
+    {% for measurement in measurements %}
+      <li>
+        {{ measurement.date }}:{% if measurement.weight %}
+          Weight: {{ measurement.weight }} kg
+        {% endif %}
+        {% if measurement.body_fat_percentage %}
+          , Body Fat: {{ measurement.body_fat_percentage }}%
+        {% endif %}
+      </li>
+    {% empty %}
+      <li>No measurements found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
