@@ -4,7 +4,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.test.client import Client
 from django.urls import reverse
-from tracker.models import Measurement
+from tracker.models import Measurement, WorkoutSession
 
 User = get_user_model()
 
@@ -83,4 +83,30 @@ def test_login_required_redirect(client: Client):
     url = reverse("add_measurement")
     response = client.get(url)
     assert response.status_code == 302
+    assert "/accounts/login/" in response.url
+
+
+@pytest.mark.django_db
+def test_add_workout_session_view_authenticated(client: Client):
+    user = User.objects.create_user(username="testuser", password="testpass123")
+    client.force_login(user)
+    url = reverse("add_workout_session")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert b"Add Workout Session" in response.content
+
+    # Teste das Absenden des Formulars
+    response = client.post(
+        url, {"date": "2023-10-10", "duration": 60, "notes": "Morning cardio session"}
+    )
+    assert response.status_code == 302  # Erfolgreiche Weiterleitung
+    session = WorkoutSession.objects.get(user=user, date="2023-10-10")
+    assert session.duration == 60
+    assert session.notes == "Morning cardio session"
+
+
+def test_add_workout_session_view_unauthenticated(client: Client):
+    url = reverse("add_workout_session")
+    response = client.get(url)
+    assert response.status_code == 302  # Weiterleitung zur Login-Seite
     assert "/accounts/login/" in response.url

@@ -18,3 +18,15 @@ class Measurement(models.Model):
 
     def __str__(self):
         return f"Measurement of {self.user.username} on {self.date}"
+
+
+class WorkoutSession(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="workout_sessions"
+    )
+    date = models.DateField()
+    duration = models.PositiveIntegerField()  # Dauer in Minuten
+    notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Workout Session of {self.user.username} on {self.date}"

@@ -11,7 +11,8 @@
     <nav>
       <a href="{% url 'index' %}">Home</a>
       {% if user.is_authenticated %}
-        <a href="{% url 'add_measurement' %}">Messung hinzufügen</a>
+        <a href="{% url 'add_measurement' %}">Add Measurement</a>
+        <a href="{% url 'add_workout_session' %}">Add Workout Session</a>
         <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: inline;">
           {% csrf_token %}
           <button type="submit">Logout</button>
@@ -20,6 +21,7 @@
         <a href="{% url 'login' %}">Login</a>
       {% endif %}
     </nav>
+
     {% block content %}
 
     {% endblock %}

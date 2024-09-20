@@ -1,0 +1,14 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}
+  Add Workout Session
+{% endblock %}
+
+{% block content %}
+  <h1>Add Workout Session</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+{% endblock %}

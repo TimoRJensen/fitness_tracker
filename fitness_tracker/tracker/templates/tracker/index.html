@@ -6,6 +6,7 @@
 
 {% block content %}
   <h1>Welcome, {{ user.username }}</h1>
+
   <h2>Your Measurements:</h2>
   <ul>
     {% for measurement in measurements %}
@@ -19,6 +20,19 @@
       </li>
     {% empty %}
       <li>No measurements found.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Your Workout Sessions:</h2>
+  <ul>
+    {% for session in workout_sessions %}
+      <li>
+        {{ session.date }}: {{ session.duration }} minutes{% if session.notes %}
+          - {{ session.notes }}
+        {% endif %}
+      </li>
+    {% empty %}
+      <li>No workout sessions found.</li>
     {% endfor %}
   </ul>
 {% endblock %}
