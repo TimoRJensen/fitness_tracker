@@ -71,3 +71,19 @@ def test_workout_session_negative_duration():
         session.save()
 
     assert "duration" in exc_info.value.message_dict
+
+
+@pytest.mark.django_db
+def test_measurement_invalid_body_fat_percentage():
+    user = User.objects.create_user(username="testuser", password="testpass123")
+    measurement_date = datetime.date(2023, 10, 12)
+    invalid_body_fat = 150.0  # Ungültiger Wert (außerhalb von 0-100)
+
+    measurement = Measurement(
+        user=user, date=measurement_date, body_fat_percentage=invalid_body_fat
+    )
+    with pytest.raises(ValidationError) as exc_info:
+        measurement.full_clean()  # Löst die Validierung aus
+        measurement.save()
+
+    assert "body_fat_percentage" in exc_info.value.message_dict

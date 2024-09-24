@@ -110,3 +110,22 @@ def test_add_workout_session_view_unauthenticated(client: Client):
     response = client.get(url)
     assert response.status_code == 302  # Weiterleitung zur Login-Seite
     assert "/accounts/login/" in response.url
+
+
+@pytest.mark.django_db
+def test_add_measurement_invalid_body_fat_percentage(client: Client):
+    user = User.objects.create_user(username="testuser", password="testpass123")
+    client.force_login(user)
+    url = reverse("add_measurement")
+
+    response = client.post(
+        url,
+        {
+            "date": "2023-10-12",
+            "body_fat_percentage": 150.0,  # Ungültiger Wert
+        },
+    )
+
+    assert response.status_code == 200  # Formular sollte erneut angezeigt werden
+    assert b"Body fat percentage must be between 0 and 100." in response.content
+    assert Measurement.objects.filter(user=user, date="2023-10-12").count() == 0

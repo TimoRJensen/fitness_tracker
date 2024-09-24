@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.forms import ValidationError
 
 
 class User(AbstractUser):
@@ -15,6 +16,20 @@ class Measurement(models.Model):
     body_fat_percentage = models.DecimalField(
         max_digits=5, decimal_places=2, null=True, blank=True
     )
+
+    def clean(self) -> None:
+        super().clean()
+        if self.weight is not None and self.weight <= 0:
+            raise ValidationError({"weight": "Weight must be a positive number."})
+        if self.body_fat_percentage is not None:
+            if not (0 <= self.body_fat_percentage <= 100):
+                raise ValidationError(
+                    {
+                        "body_fat_percentage": (
+                            "Body fat percentage must be between 0 " + "and 100."
+                        )
+                    }
+                )
 
     def __str__(self):
         return f"Measurement of {self.user.username} on {self.date}"
