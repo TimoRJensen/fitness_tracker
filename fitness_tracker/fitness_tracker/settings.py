@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-lpb9!i-^79z&kf$(jl55gvl$&$hei!i=gbqi3l1lk!8)os#1lw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["gettohhole.synology.me", "ds_412_jensen", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -76,10 +76,11 @@ WSGI_APPLICATION = "fitness_tracker.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+DB_DIR = BASE_DIR / "data"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": DB_DIR / "db.sqlite3",
     }
 }
 
